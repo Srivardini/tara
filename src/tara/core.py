@@ -5,6 +5,7 @@ import numpy as np
 import tqdm
 
 import glob
+import platform
 
 from photutils.detection import DAOStarFinder
 from photutils.aperture import CircularAperture, CircularAnnulus
@@ -82,38 +83,14 @@ class Base():
     return phot_table, (apertures,bags)
   
 def update_dirs(out_dir):
-    if not os.path.exists(f'{out_dir}/images'):
-      os.mkdir(f'{out_dir}/images')
+    
+    for i in ['images', 'exposure_image', 'animations',
+              'SNR_table', 'cube', 'coordinates']:
+      if not os.path.exists(f'{out_dir}/{i}'):
+        os.mkdir(f'{out_dir}/{i}')
 
-    else:
-      os.system(f"rm {out_dir}/images/*")
-
-    if not os.path.exists(f'{out_dir}/exposure_images'):
-      os.mkdir(f'{out_dir}/exposure_images')
-
-    else:
-      os.system(f"rm {out_dir}exposure_images/*")
-
-    if not os.path.exists(f'{out_dir}/animations'):
-      os.mkdir(f'{out_dir}/animations')
-
-    else:
-      os.system(f"rm {out_dir}animations/*")
-
-    if not os.path.exists(f'{out_dir}/SNR_table'):
-      os.mkdir(f'{out_dir}/SNR_table')
-    else:
-      os.system(f"rm {out_dir}/SNR_table/*")
-
-    if not os.path.exists(f'{out_dir}/cube'):
-      os.mkdir(f'{out_dir}/cube')
-    else:
-      os.system(f"rm {out_dir}/cube/*")
-
-    if not os.path.exists(f'{out_dir}/coordinates'):
-      os.mkdir(f'{out_dir}/coordinates')
-    else:
-      os.system(f"rm {out_dir}/coordinates/*")
+      elif platform.system() is not 'Windows':
+        os.system(f"rm {out_dir}/{i}/*")
 
 class tara(Base):
 
@@ -141,9 +118,12 @@ class tara(Base):
       raise Exception("No '.fits' files in input list")
 
     self.exps = exps
-    hdul = fits.open(exps[id])
-    img = hdul[0].data
-
+    hdul = fits.open(exps[0])
+    for ext in range(len(hdul)):
+      img = hdul[ext].data
+      if img is not None: 
+        break
+    self.ext = ext
     self.shape = img.shape
     print("-------------------------------------------------")
     print(f"Input directory contains {len(exps)} '.fits' 'files")
@@ -184,7 +164,7 @@ class tara(Base):
                  check_photometry=True, th=1, r=10, r_in=None, r_out=None):
 
     hdul = fits.open(self.exps[id])
-    img = hdul[0].data
+    img = hdul[self.ext].data
 
     if fig is None:
       fig = plt.figure(figsize=(7,7))
@@ -231,9 +211,9 @@ class tara(Base):
     for i,exp in enumerate(tqdm.tqdm(self.exps[int(start):int(end)], colour = 'GREEN')):
 
       hdul = fits.open(exp)
-      img = hdul[0].data
+      img = hdul[self.ext].data
 
-      time = hdul[0].header['JD_UTC']
+      time = i#hdul[self.ext].header['JD_UTC']
       hdul.close()
 
       if self.crop_image:
@@ -249,7 +229,7 @@ class tara(Base):
       else:
         mask = 1
 
-      masked_img = mask*img
+      img = mask*img
 
       if self.bin_image:
         img = img.reshape(self.x_bin, self.bin_fact,
@@ -357,11 +337,12 @@ class tara(Base):
 
     return np.array(imgs), poss
 
-  def __call__(self, th=1, rnge=[0,-1], step=1,
+  def __call__(self, th=1, rnge=[0,10], step=1,
                 r=1, r_in = None, r_out = None,
                 th_cube=None, ref_pos=None, ref_img=None,
               mar_pix=5, mask_hot_pixel=False):
     
+
     update_dirs(self.out_dir)
 
     if r_in is None or r_out is None:

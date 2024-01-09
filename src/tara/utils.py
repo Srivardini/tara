@@ -1,4 +1,5 @@
 import numpy as np
+import os
 import matplotlib.pyplot as plt
 
 from matplotlib.ticker import (MultipleLocator,AutoLocator, AutoMinorLocator)
@@ -67,3 +68,22 @@ def gen_plot(data, key='SNR', t=None, out_dir='.',hdul = None, fmt='o',
                 bbox=dict(facecolor='red', alpha=0.2))
     fig.savefig(f'{out_dir}/exposure_images/{id}.png')
     return fig, ax
+
+def clean_outdir(out_dir='.'):
+    if os.path.exists(f'{out_dir}/images'):
+        os.system(f"rm  -r {out_dir}/images")
+
+    if os.path.exists(f'{out_dir}/exposure_images'):
+        os.system(f"rm -r {out_dir}/exposure_images/")
+
+    if os.path.exists(f'{out_dir}/animations'):
+        os.system(f"rm -r {out_dir}/animations")
+
+    if not os.path.exists(f'{out_dir}/SNR_table'):
+        os.system(f"rm -r {out_dir}/SNR_table")
+
+    if not os.path.exists(f'{out_dir}/cube'):
+        os.system(f"rm -r {out_dir}/cube")
+
+    if not os.path.exists(f'{out_dir}/coordinates'):
+        os.system(f"rm -r {out_dir}/coordinates")
