@@ -120,7 +120,7 @@ class tara(Base):
   def __init__(self, input_files=[], out_dir='.', box_size=64,
                sigma=3,fwhm=10, gain=68, filter_size=(3,3), crop_image=False,
                x_cen=None, y_cen = None,
-               size=0, bin_image=False, bin_fact=1,id=0):
+               size=0, bin_image=False, bin_fact=1):
 
     self.box_size = box_size
     self.fwhm = fwhm
@@ -140,9 +140,9 @@ class tara(Base):
     if len(exps)<1:
       raise Exception("No '.fits' files in input list")
 
-    self.hdul = fits.open(exps[id])
-
-    img = self.hdul[0].data
+    self.exps = exps
+    hdul = fits.open(exps[id])
+    img = hdul[0].data
 
     self.shape = img.shape
     print("-------------------------------------------------")
@@ -175,32 +175,35 @@ class tara(Base):
       else:
         self.bin_image = False
 
-    self.img = img
     print(f"Image shape: {self.shape}")
     print("-------------------------------------------------")
 
     self.out_dir=out_dir
 
-  def show_image(self, cmap='jet', norm='sqrt', fig=None,
+  def show_image(self, cmap='jet', norm='sqrt', fig=None, id=0,
                  check_photometry=True, th=1, r=10, r_in=None, r_out=None):
+
+    hdul = fits.open(self.exps[id])
+    img = hdul[0].data
 
     if fig is None:
       fig = plt.figure(figsize=(7,7))
       ax = fig.add_subplot()
 
-    norm = simple_norm(self.img, norm, percent=99.)
-    ax.imshow(self.img, cmap=cmap, norm=norm)
+    norm = simple_norm(img, norm, percent=99.)
+    ax.imshow(img, cmap=cmap, norm=norm)
 
     if check_photometry:
       if r_in is None or r_out is None:
         r_in = r*1.2                             #Changed r_in/out from r*1.2/.5
         r_out = r*1.5
 
-      sources, _, _ = self.detect_stars(self.img ,th=th)
+      sources, _, _ = self.detect_stars(img ,th=th)
 
-      phot_table, apers = self.perform_photometry(sources, self.img,
+      phot_table, apers = self.perform_photometry(sources, img,
                                                   gain=self.gain,
-                                                  r=r, r_in=r_in, r_out=r_out)
+                                                  r=r, r_in=r_in, 
+                                                  r_out=r_out)
 
       apers[0].plot(ax, color='blue')
       apers[1].plot(ax, color='black')
