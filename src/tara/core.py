@@ -89,7 +89,7 @@ def update_dirs(out_dir):
       if not os.path.exists(f'{out_dir}/{i}'):
         os.mkdir(f'{out_dir}/{i}')
 
-      elif platform.system() is not 'Windows':
+      elif platform.system() != 'Windows':
         os.system(f"rm {out_dir}/{i}/*")
 
 class tara(Base):
@@ -344,7 +344,7 @@ class tara(Base):
     
 
     update_dirs(self.out_dir)
-
+    poss = [None]
     if r_in is None or r_out is None:
       r_in = r*1.2
       r_out = r*1.5
