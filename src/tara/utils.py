@@ -37,7 +37,7 @@ def gen_plot(data, key='SNR', t=None, out_dir='.',hdul = None, fmt='o',
           else:
             if norm:
               x = x/x.mean()
-            ax.plot(t,x, alpha=1,s=20, fmt=fmt)
+            ax.plot(t,x, fmt, alpha=1,lw=lw)
     else:
        raise Exception("Binning Failed. Try changing bin_fact")
     if diff_phot:
