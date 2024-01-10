@@ -93,12 +93,49 @@ def update_dirs(out_dir):
         os.system(f"rm {out_dir}/{i}/*")
 
 class tara(Base):
+  """
+  This Class aligns input list of images and performs photometry on them
+  """
 
   def __init__(self, input_files=[], out_dir='.', box_size=64,
                sigma=3,fwhm=10, gain=68, filter_size=(3,3), crop_image=False,
                x_cen=None, y_cen = None,
                size=0, bin_image=False, bin_fact=1):
+    """
+    Parameters
+    ----------
+    input_files: list,
+                 sorted input list of FITS files.
+    out_dir: str,
+              path to the output directory.
+    box_size: int,
+              box size for Photutils Background estimation.
+    sigma: float,
+            minimum sigma for detecting sources.
+    fwhm: float,
+          Full Width at Half Maximum of the PSF.
+    gain: float,
+          gain of the detector [e/ADU].
+    filter_size: (int, int),
+                shape of the background estimation filter. 
+                It shape should be odd.
+    crop_image: bool,
+                Option to choose whether to crop the image or not.
+    x_cen: float,
+           x coordinate of the region of interest.
+    y_cen: float,
+           y coordinate of the region of interest.
+    size: int,
+          size of the region of interest. The shape of the region would be (size, size).
+    bin_image: bool,
+              Option to choose whether to bin the image or not.
+    bin_fact: int,
+              Binning factor if binning is enabled.
 
+    Return
+    ------
+    None              
+    """
     self.box_size = box_size
     self.fwhm = fwhm
     self.gain = gain
