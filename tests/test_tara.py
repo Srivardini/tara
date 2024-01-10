@@ -27,4 +27,4 @@ def test_call():
         os.mkdir('test_out')
     tar_obj = tara.tara(exps, out_dir='test_out')
     ref_pos, ref_img = tar_obj(rnge =[0,3],step=3)
-    os.remove('test_out')
+    os.system('rm -r test_out')
