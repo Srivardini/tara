@@ -10,7 +10,7 @@ setup(
         license='BSD 2-clause',
         package_dir={'': 'src'},
         packages=find_packages(where='src'),
-        install_requires=['matplotlib', 'astropy', 'photutils',
+        install_requires=['matplotlib', 'astropy', 'photutils', 'tqdm',
                           'numpy', 'astroalign','aafitrans'],
         include_package_data=True,
         package_data={'': ['tara/data/*']},
