@@ -84,7 +84,7 @@ class Base():
   
 def update_dirs(out_dir):
     
-    for i in ['images', 'exposure_image', 'animations',
+    for i in ['images', 'exposure_images', 'animations',
               'SNR_table', 'cube', 'coordinates']:
       if not os.path.exists(f'{out_dir}/{i}'):
         os.mkdir(f'{out_dir}/{i}')
