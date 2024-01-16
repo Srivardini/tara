@@ -457,7 +457,6 @@ class tara(Base):
 
     for i, f in enumerate(tqdm.tqdm(tab_name, colour = 'GREEN')):
       phot_table = Table.read(f)
-      print(phot_table)
       phot_table['SNR_mean'] = phot_table['SNR'].mean(axis=1)
       phot_table.sort('SNR_mean', reverse=True)
       if i == 0 :
