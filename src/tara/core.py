@@ -58,7 +58,7 @@ class Base():
 
   def perform_photometry(self,sources, data, gain =1, RN=3, DC=2,
                          r = 3, r_in = 10, r_out = 15):
-
+    gain = 1/gain # gain should be in e/ADUs
     positions = np.transpose((sources['xcentroid'], sources['ycentroid']))
     apertures = CircularAperture(positions, r=r)
     bags = CircularAnnulus(positions, r_in, r_out)
