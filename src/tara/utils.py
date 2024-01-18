@@ -12,7 +12,7 @@ import matplotlib.animation as animation
 
 def gen_plot(data, key='SNR', t=None, out_dir='.',hdul = None, fmt='o',
              camera_name = None,id = None, fig=None, ax =None, figsize=(15,5),
-             bin_fact = 1, diff_phot=False, norm=False, lw=2, slice_end=-1):
+             bin_fact = 1, diff_phot=False, norm=False, lw=2, slice_end=None):
 
     if fig is None or ax is None:
         fig = plt.figure(figsize=figsize)
