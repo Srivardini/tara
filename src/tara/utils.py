@@ -43,7 +43,7 @@ def gen_plot(data, key='SNR', t=None, out_dir='.',hdul = None, fmt='o',
     if diff_phot:
       source = source/source.mean()
       ref =  ref/ref.mean()
-      ax.plot(t,source/ref, 'o', alpha=1)
+      ax.plot(t,source/ref, fmt, alpha=1, lw=lw)
 
       # Assuming standard deviation as error for demonstration
       y_err = np.std(source/ref)
