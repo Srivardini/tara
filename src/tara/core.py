@@ -68,12 +68,12 @@ class Base():
 
     phot_table = aperture_photometry(data, [apertures,bags])                                                            # calling the package Photutils_aperture_photometry
 
-    phot_table['sky_flux'] = phot_table['aperture_sum_1'].value*(ap_pix/bag_pix)                                              # calculating sky flux by drawing an annulus
+    phot_table['sky_flux'] = gain*phot_table['aperture_sum_1'].value*(ap_pix/bag_pix)                                              # calculating sky flux by drawing an annulus
 
-    phot_table['flux'] = phot_table['aperture_sum_0'].value - \
+    phot_table['flux'] = gain*phot_table['aperture_sum_0'].value - \
                         phot_table['sky_flux'].value                              # calculating source flux
 
-    Noise_2 = gain*(phot_table['flux'].value  + phot_table['sky_flux'].value)+\
+    Noise_2 = (phot_table['flux'].value  + phot_table['sky_flux'].value)+\
                      (DC + RN**2 + (gain/2)**2)*ap_pix
 
     phot_table['flux_err'] = np.sqrt(Noise_2)          # calculating error on the source flux
