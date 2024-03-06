@@ -462,10 +462,7 @@ class tara(Base):
     self.phot_table = phot_table
     return ref_pos, ref_img
 
-  def merge_phot_table(self, out_dir='.'):
-
-    tab_name = glob.glob(f'{self.out_dir}/SNR_table/*')
-    tab_name = sorted(tab_name, key=lambda x: int(x.split('/')[-1].split('_')[0]))
+  def merge_phot_table(self, tab_name = [] , out_dir='.'):
 
     # Concatenate photometry of all cubes
 
