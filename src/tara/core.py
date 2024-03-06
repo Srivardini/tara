@@ -176,7 +176,7 @@ class tara(Base):
             self.shape = img.shape
         else:
           self.crop_image = False
-        if crop_image and (self.shape[0]<50 or self.shape[1]<50:
+        if crop_image and (self.shape[0]<50 or self.shape[1]<50):
           self.crop_image = False
           print("Final Image too small")
 
@@ -191,10 +191,13 @@ class tara(Base):
         self.x_bin = x_bin
         self.y_bin = y_bin
         self.bin_fact = bin_fact
+        self.shape = img.shape
 
       else:
         self.bin_image = False
-
+      if bin_image and (self.shape[0]<50 or self.shape[1]<50):
+        self.crop_image = False
+        print("Final Image too small")
     print(f"Image shape: {self.shape}")
     print("-------------------------------------------------")
 
