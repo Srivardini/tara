@@ -150,7 +150,6 @@ class tara(Base):
     self.align_sources = []
     self.align_sources = []                 
     
-
     exps = [i for i in input_files if 'fits' in i.split('.')[-1]]
 
     if len(exps)<1:
