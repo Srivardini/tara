@@ -148,6 +148,8 @@ class tara(Base):
 
     self.align_phot = False
     self.align_sources = []
+    self.align_sources = []                 
+    
 
     exps = [i for i in input_files if 'fits' in i.split('.')[-1]]
 
@@ -167,15 +169,17 @@ class tara(Base):
 
     if crop_image:
         if x_cen is not None and y_cen is not None and size>0:
-          img = img[x_cen - size: x_cen + size,
-                    y_cen - size: y_cen + size].copy()
-          print('Input image is Cropped')
-          self.x_cen = x_cen
-          self.y_cen = y_cen
-          self.size = size
-          self.shape = img.shape
+            img = img[x_cen - size: x_cen + size,
+                      y_cen - size: y_cen + size].copy()
+            self.x_cen = x_cen
+            self.y_cen = y_cen
+            self.size = size
+            self.shape = img.shape
         else:
           self.crop_image = False
+        if crop_image and (self.shape[0]<50 or self.shape[1]<50:
+          self.crop_image = False
+          print("Final Image too small")
 
     if bin_image:
       if img.shape[0] % bin_fact == 0 and img.shape[1] % bin_fact ==0 :
@@ -202,6 +206,14 @@ class tara(Base):
 
     hdul = fits.open(self.exps[id])
     img = hdul[self.ext].data
+
+    if self.crop_image:
+        img = img[self.x_cen - self.size:self.x_cen + self.size,
+                    self.y_cen - self.size:self.y_cen + self.size].copy()
+      
+    if self.bin_image:
+        img = img.reshape(self.x_bin, self.bin_fact,
+                          self.y_bin, self.bin_fact).sum(axis = (1,3))
 
     if fig is None:
       fig = plt.figure(figsize=(7,7))
