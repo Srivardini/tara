@@ -47,7 +47,7 @@ def gen_plot(data, key='SNR', t=None, out_dir='.',hdul = None, fmt='o',
 
       # Assuming standard deviation as error for demonstration
       y_err = np.std(source/ref)
-      ax.errorbar(t, source/ref, yerr=y_err, fmt='o', alpha=1)
+      ax.errorbar(t, source/ref, yerr=y_err, fmt=fmt, alpha=1)
 
     #ax.set_xlabel('Frames')
     ax.set_ylabel(f'{key}')
