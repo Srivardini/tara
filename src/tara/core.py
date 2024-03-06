@@ -98,7 +98,7 @@ class tara(Base):
   """
 
   def __init__(self, input_files=[], out_dir='.', box_size=64,
-               sigma=3,fwhm=10, gain=68, filter_size=(3,3), crop_image=False,
+               sigma=3,fwhm=10, gain=1, filter_size=(3,3), crop_image=False,
                x_cen=None, y_cen = None,
                size=0, bin_image=False, bin_fact=1):
     """
