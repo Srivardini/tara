@@ -29,7 +29,7 @@ def gen_plot(data, key='SNR', t=None, out_dir='.',hdul = None, fmt='o',
           x = x.reshape(-1, bin_fact).mean(axis=1)
 
           #Adding mask to plot:
-          mask = (x[1:]-x[:-1])<500
+          mask = (x[1:]-x[:-1])<200
           mask = np.array([True] + list(mask))
           mask = np.where(~mask,np.nan, 1)
           x = x*mask
