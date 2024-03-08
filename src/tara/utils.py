@@ -41,8 +41,8 @@ def gen_plot(data, key='SNR', t=None, out_dir='.',hdul = None, fmt='o',
     else:
        raise Exception("Binning Failed. Try changing bin_fact")
     if diff_phot:
-      source = source/source.mean()
-      ref =  ref/ref.mean()
+      # source = source/source.mean()
+      # ref =  ref/ref.mean()
       ax.plot(t,source/ref, fmt, alpha=1, lw=lw)
 
       # Assuming standard deviation as error for demonstration
