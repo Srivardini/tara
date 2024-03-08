@@ -28,6 +28,12 @@ def gen_plot(data, key='SNR', t=None, out_dir='.',hdul = None, fmt='o',
           x = np.array(row[key])[:slice_end]
           x = x.reshape(-1, bin_fact).mean(axis=1)
 
+          #Adding mask to plot:
+          mask = (x.values[1:]-x.values[:-1])<500
+          mask = np.array([True] + list(mask))
+          mask = np.where(~mask,np.nan, 1)
+          x = x*mask
+
           if diff_phot:
             if flag:
               source = x
