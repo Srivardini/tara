@@ -149,13 +149,15 @@ class tara(Base):
     self.align_phot = False
     self.align_sources = []
     self.align_sources = []                 
-    
-    exps = [i for i in input_files if 'fits' in i.split('.')[-1]]
 
-    if len(exps)<1:
-      raise Exception("No '.fits' files in input list")
+    #just commenting out cause some old files are in .FIT type
+    #exps = [i for i in input_files if 'fits' in i.split('.')[-1]]
+
+    #if len(exps)<1:
+    #raise Exception("No '.fits' files in input list")
 
     self.exps = exps
+                 
     hdul = fits.open(exps[0])
     for ext in range(len(hdul)):
       img = hdul[ext].data
