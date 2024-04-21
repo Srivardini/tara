@@ -150,11 +150,11 @@ class tara(Base):
     self.align_sources = []
     self.align_sources = []                 
 
-    #just commenting out cause some old files are in .FIT type
-    #exps = [i for i in input_files if 'fits' in i.split('.')[-1]]
+    #just commenting out cause some old files are in .FIT type. Shouldn't have.
+    exps = [i for i in input_files if 'fits' in i.split('.')[-1].lower() or 'fit' in i.split('.')[-1].lower()]
 
-    #if len(exps)<1:
-    #raise Exception("No '.fits' files in input list")
+    if len(exps)<1:
+      raise Exception("No '.fits' files in input list")
 
     self.exps = exps
                  
