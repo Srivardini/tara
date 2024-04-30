@@ -97,7 +97,7 @@ class tara(Base):
   This Class aligns input list of images and performs photometry on them
   """
 
-  def __init__(self, input_files=[], out_dir='.', box_size=64,
+  def __init__(self, input_files=[], out_dir='.', box_size=32,
                sigma=3,fwhm=10, gain=1, filter_size=(3,3), crop_image=False,
                x_cen=None, y_cen = None,
                size=0, bin_image=False, bin_fact=1):
