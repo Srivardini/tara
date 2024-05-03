@@ -170,8 +170,8 @@ class tara(Base):
 
     if crop_image:
         if x_cen is not None and y_cen is not None and size>0:
-            img = img[x_cen - size: x_cen + size,
-                      y_cen - size: y_cen + size].copy()
+            img = img[y_cen - size: y_cen + size,
+                      x_cen - size: x_cen + size].copy()
             self.x_cen = x_cen
             self.y_cen = y_cen
             self.size = size
@@ -206,14 +206,14 @@ class tara(Base):
     self.out_dir=out_dir
 
   def show_image(self, cmap='jet', norm='sqrt', fig=None, id=0,
-                 check_photometry=True, th=1, r=10, r_in=None, r_out=None):
+                 check_photometry=True, th=1, r=10, r_in=None, r_out=None, mar_pix=5):
 
     hdul = fits.open(self.exps[id])
     img = hdul[self.ext].data
 
     if self.crop_image:
-        img = img[self.x_cen - self.size:self.x_cen + self.size,
-                    self.y_cen - self.size:self.y_cen + self.size].copy()
+        img = img[self.y_cen - self.size:self.y_cen + self.size,
+                    self.x_cen - self.size:self.x_cen + self.size].copy()
       
     if self.bin_image:
         img = img.reshape(self.x_bin, self.bin_fact,
@@ -232,6 +232,14 @@ class tara(Base):
         r_out = r*1.5
 
       sources, _, _ = self.detect_stars(img ,th=th)
+
+      
+      y_len, x_len = img.shape
+      sources = sources[(sources['ycentroid']<y_len-mar_pix) &
+                        (sources['ycentroid']>mar_pix)]
+
+      sources = sources[(sources['xcentroid']<x_len-mar_pix) &
+                        (sources['xcentroid']>mar_pix)]
 
       phot_table, apers = self.perform_photometry(sources, img,
                                                   gain=self.gain,
@@ -270,8 +278,8 @@ class tara(Base):
       hdul.close()
 
       if self.crop_image:
-          img = img[self.x_cen - self.size:self.x_cen + self.size,
-                    self.y_cen - self.size:self.y_cen + self.size].copy()
+          img = img[self.y_cen - self.size:self.y_cen + self.size,
+                    self.x_cen - self.size:self.x_cen + self.size].copy()
 
       if img.shape != self.shape:
         print(f"\nImage shape is {img.shape} not {self.shape}. Skipping")
