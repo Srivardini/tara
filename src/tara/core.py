@@ -98,7 +98,8 @@ class tara(Base):
   """
 
   def __init__(self, input_files=[], out_dir='.', box_size=32,
-               sigma=3,fwhm=10, gain=1, filter_size=(3,3), crop_image=False,
+               sigma=3,fwhm=10, gain=1, RN=3,DC=2,
+               filter_size=(3,3), crop_image=False,
                x_cen=None, y_cen = None,
                size=0, bin_image=False, bin_fact=1):
     """
@@ -139,6 +140,8 @@ class tara(Base):
     self.box_size = box_size
     self.fwhm = fwhm
     self.gain = gain
+    self.RN = RN
+    self.DC = DC
     self.sigma = sigma
     self.filter_size = filter_size
     self.crop_image = crop_image
@@ -243,6 +246,8 @@ class tara(Base):
 
       phot_table, apers = self.perform_photometry(sources, img,
                                                   gain=self.gain,
+                                                  RN = self.RN,
+                                                  DC = self.DC,
                                                   r=r, r_in=r_in, 
                                                   r_out=r_out)
 
@@ -319,7 +324,7 @@ class tara(Base):
                         (sources['xcentroid']>mar_pix)]
 
       #Performing aperture photometry
-      phot_table, apers = self.perform_photometry(sources, img, self.gain,
+      phot_table, apers = self.perform_photometry(sources, img, gain=self.gain, RN=self.RN, DC=self.DC,
                                                   r=r, r_in=r_in, r_out=r_out)
 
       phot_table.sort('SNR', reverse=True)
@@ -442,6 +447,8 @@ class tara(Base):
 
       phot_table, _ = self.perform_photometry(sources, ref_img,
                                                 gain=self.gain,
+                                                RN=self.RN, 
+                                                DC=self.DC,
                                                 r=r, r_in=r_in, r_out=r_out)
 
       flux = []
@@ -451,7 +458,7 @@ class tara(Base):
 
       for img in cube:
 
-        phot_table, _ = self.perform_photometry(sources, img, gain=self.gain,
+        phot_table, _ = self.perform_photometry(sources, img, gain=self.gain, RN=self.RN, DC=self.DC,
                                                   r=r, r_in=r_in, r_out=r_out)
         flux.append(phot_table['flux'].value)
         flux_err.append(phot_table['flux_err'].value)
