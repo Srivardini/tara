@@ -12,7 +12,8 @@ import matplotlib.animation as animation
 
 def gen_plot(data, key='SNR', t=None, out_dir='.',hdul = None, fmt='o',
              camera_name = None,id = None, fig=None, ax =None, figsize=(15,5),
-             bin_fact = 1, diff_phot=False, norm=False, lw=2, slice_end=None):
+             bin_fact = 1, diff_phot=False, norm=False, lw=2, slice_end=None,
+            mask_min=200):
 
     if fig is None or ax is None:
         fig = plt.figure(figsize=figsize)
@@ -29,7 +30,7 @@ def gen_plot(data, key='SNR', t=None, out_dir='.',hdul = None, fmt='o',
           x = x.reshape(-1, bin_fact).mean(axis=1)
 
           #Adding mask to plot:
-          mask = (x[1:]-x[:-1])<200
+          mask = (x[1:]-x[:-1])<mask_min
           mask = np.array([True] + list(mask))
           mask = np.where(~mask,np.nan, 1)
           x = x*mask
